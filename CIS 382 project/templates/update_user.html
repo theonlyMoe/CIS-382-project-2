@@ -1,187 +1,25 @@
+{% extends "base.html" %}
+{% block title %}تعديل مستخدم{% endblock %}
+{% block body %}
+<div class="container narrow">
+    <div class="icon">✎</div>
+    <h1>تعديل المستخدم</h1>
+    <p class="subtitle">عدّل بيانات المستخدم أدناه</p>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Update User</title>
+    <form action="{{ url_for('update_user_route', id=user['id']) }}" method="POST">
+        <div class="group">
+            <label for="name">الاسم</label>
+            <input type="text" id="name" name="name" value="{{ user['name'] }}" required>
+        </div>
+        <div class="group">
+            <label for="age">العمر</label>
+            <input type="number" id="age" name="age" value="{{ user['age'] }}" required>
+        </div>
+        <button class="btn" type="submit">حفظ التعديلات</button>
+    </form>
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            min-height: 100vh;
-            background: #0a0a0a;
-            color: #ffffff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .container {
-            width: 90%;
-            max-width: 500px;
-            background: #151515;
-            padding: 40px;
-            border-radius: 16px;
-            border: 1px solid #2a2a2a;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
-        }
-
-        .icon {
-            width: 60px;
-            height: 60px;
-            margin: 0 auto 20px;
-            border-radius: 50%;
-            background: #222;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 26px;
-            border: 1px solid #333;
-        }
-
-        h1 {
-            text-align: center;
-            font-size: 28px;
-            margin-bottom: 8px;
-            color: #ffffff;
-        }
-
-        .subtitle {
-            text-align: center;
-            color: #888;
-            font-size: 14px;
-            margin-bottom: 30px;
-        }
-
-        form {
-            display: flex;
-            flex-direction: column;
-            gap: 18px;
-        }
-
-        .input-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        label {
-            font-size: 14px;
-            color: #aaa;
-        }
-
-        input {
-            width: 100%;
-            padding: 13px 15px;
-            font-size: 15px;
-            color: #fff;
-            background: #0d0d0d;
-            border: 1px solid #333;
-            border-radius: 8px;
-            outline: none;
-            transition: 0.3s;
-        }
-
-        input:focus {
-            border-color: #666;
-            background: #111;
-            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.05);
-        }
-
-        button {
-            margin-top: 8px;
-            padding: 14px;
-            font-size: 15px;
-            font-weight: bold;
-            color: #000;
-            background: #ffffff;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        button:hover {
-            background: #dcdcdc;
-            transform: translateY(-1px);
-        }
-
-        .back-link {
-            display: block;
-            margin-top: 22px;
-            text-align: center;
-            color: #888;
-            font-size: 14px;
-            text-decoration: none;
-            transition: 0.3s;
-        }
-
-        .back-link:hover {
-            color: #fff;
-        }
-
-        @media (max-width: 500px) {
-            .container {
-                padding: 30px 22px;
-            }
-
-            h1 {
-                font-size: 24px;
-            }
-        }
-    </style>
-</head>
-
-<body>
-
-    <div class="container">
-
-        <div class="icon">✎</div>
-
-        <h1>Update User</h1>
-        <p class="subtitle">Edit the user's information below</p>
-
-        <form action="/update_user/{{ user[0] }}" method="POST">
-
-            <div class="input-group">
-                <label for="name">Name</label>
-                <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value="{{ user[1] }}"
-                    placeholder="Enter name"
-                    required
-                >
-            </div>
-
-            <div class="input-group">
-                <label for="age">Age</label>
-                <input
-                    type="number"
-                    id="age"
-                    name="age"
-                    value="{{ user[2] }}"
-                    placeholder="Enter age"
-                    required
-                >
-            </div>
-
-            <button type="submit">Update User</button>
-
-        </form>
-
-        <a href="/" class="back-link">← Back to Users List</a>
-
+    <div style="text-align:center;margin-top:20px">
+        <a class="link" href="{{ url_for('users_page') }}">→ العودة لقائمة المستخدمين</a>
     </div>
-
-</body>
-</html>
-```
+</div>
+{% endblock %}

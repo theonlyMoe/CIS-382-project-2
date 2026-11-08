@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Accounting{% endblock %}</title>
+    <style>
+        :root {
+            --bg: #05070d;
+            --panel: rgba(11, 16, 32, 0.85);
+            --panel-2: #0e1530;
+            --line: rgba(76, 141, 255, 0.22);
+            --blue: #3b82f6;
+            --blue-2: #2563eb;
+            --cyan: #38bdf8;
+            --text: #e8eefc;
+            --muted: #8fa0c8;
+            --green: #34d399;
+            --red: #f87171;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+            min-height: 100vh;
+            background:
+                radial-gradient(900px 500px at 85% -10%, rgba(59,130,246,.18), transparent 60%),
+                radial-gradient(700px 400px at -10% 110%, rgba(56,189,248,.10), transparent 60%),
+                var(--bg);
+            color: var(--text);
+            padding: 30px 16px;
+        }
+        .center { display: flex; align-items: center; justify-content: center; }
+        .container {
+            width: 100%; max-width: 860px; margin: 0 auto;
+            background: var(--panel); backdrop-filter: blur(14px);
+            border: 1px solid var(--line); border-radius: 22px;
+            padding: 36px; box-shadow: 0 30px 70px rgba(37, 99, 235, .15);
+        }
+        .container.narrow { max-width: 440px; }
+        .icon {
+            width: 66px; height: 66px; margin: 0 auto 18px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; font-size: 28px;
+            background: linear-gradient(135deg, var(--blue-2), var(--cyan));
+            box-shadow: 0 0 28px rgba(59,130,246,.45);
+        }
+        h1 {
+            font-size: 28px; text-align: center; margin-bottom: 6px;
+            background: linear-gradient(90deg, var(--blue), var(--cyan));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        h2 { font-size: 17px; margin-bottom: 16px; color: #cfe0ff; }
+        .subtitle { text-align: center; color: var(--muted); font-size: 14px; margin-bottom: 26px; }
+        form { display: flex; flex-direction: column; gap: 14px; }
+        .group { display: flex; flex-direction: column; gap: 7px; }
+        label { font-size: 13px; color: var(--muted); }
+        input, select {
+            width: 100%; padding: 13px 16px; font-size: 15px; color: #fff;
+            background: rgba(5, 7, 13, .9); border: 1px solid var(--line);
+            border-radius: 10px; outline: none; transition: .25s; font-family: inherit;
+        }
+        select option { background: #0b1020; }
+        input:focus, select:focus {
+            border-color: var(--blue); box-shadow: 0 0 0 3px rgba(59,130,246,.2);
+        }
+        .btn {
+            padding: 13px 18px; font-size: 15px; font-weight: 700; color: #fff; cursor: pointer;
+            background: linear-gradient(135deg, var(--blue-2), var(--blue));
+            border: none; border-radius: 10px; transition: .25s; text-decoration: none;
+            text-align: center; box-shadow: 0 6px 20px rgba(37,99,235,.35); font-family: inherit;
+        }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(59,130,246,.5); }
+        .btn.ghost {
+            background: transparent; color: var(--cyan); border: 1px solid var(--line); box-shadow: none;
+        }
+        .btn.ghost:hover { background: rgba(59,130,246,.12); }
+        .btn.sm { padding: 8px 14px; font-size: 13px; }
+        .btn.danger { background: transparent; color: var(--red); border: 1px solid rgba(248,113,113,.35); box-shadow: none; }
+        .btn.danger:hover { background: var(--red); color: #fff; }
+        .flash { padding: 12px 14px; border-radius: 10px; font-size: 14px; margin-bottom: 16px; text-align: center; }
+        .flash.error { background: rgba(248,113,113,.1); border: 1px solid rgba(248,113,113,.35); color: #fca5a5; }
+        .flash.success { background: rgba(52,211,153,.1); border: 1px solid rgba(52,211,153,.35); color: #6ee7b7; }
+        .nav { display: flex; justify-content: space-between; align-items: center; gap: 10px;
+               flex-wrap: wrap; max-width: 860px; margin: 0 auto 18px; }
+        .nav .who { color: var(--muted); font-size: 13px; direction: ltr; }
+        .nav .links { display: flex; gap: 8px; }
+        .divider { height: 1px; background: var(--line); margin: 28px 0; }
+        .empty { text-align: center; padding: 30px; color: var(--muted);
+                 border: 1px dashed var(--line); border-radius: 12px; }
+        .link { color: var(--cyan); text-decoration: none; font-size: 14px; }
+        .link:hover { text-decoration: underline; }
+        @media (max-width: 600px) { .container { padding: 24px 16px; } }
+    </style>
+    {% block head %}{% endblock %}
+</head>
+<body>
+{% if session.email %}
+<div class="nav">
+    <span class="who">{{ session.email }}</span>
+    <div class="links">
+        <a class="btn ghost sm" href="{{ url_for('accounting') }}">المحاسبة</a>
+        <a class="btn ghost sm" href="{{ url_for('users_page') }}">المستخدمون</a>
+        <a class="btn danger sm" href="{{ url_for('logout') }}">خروج</a>
+    </div>
+</div>
+{% endif %}
+{% block body %}{% endblock %}
+</body>
+</html>

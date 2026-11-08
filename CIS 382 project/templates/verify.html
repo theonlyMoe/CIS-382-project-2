@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}التحقق{% endblock %}
+{% block head %}
+<style>
+    .otp { text-align: center; letter-spacing: 12px; font-size: 24px; font-weight: 700; direction: ltr; }
+    .mail { direction: ltr; color: var(--cyan); }
+</style>
+{% endblock %}
+{% block body %}
+<div class="container narrow" style="margin-top:8vh">
+    <div class="icon">🔐</div>
+    <h1>رمز التحقق</h1>
+    <p class="subtitle">أرسلنا رمزاً من 6 أرقام إلى<br><span class="mail">{{ email }}</span></p>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for cat, msg in messages %}<div class="flash {{ cat }}">{{ msg }}</div>{% endfor %}
+    {% endwith %}
+
+    <form method="POST" action="{{ url_for('verify') }}">
+        <input class="otp" type="text" name="code" inputmode="numeric" pattern="\d{6}"
+               maxlength="6" placeholder="······" autocomplete="one-time-code" required autofocus>
+        <button class="btn" type="submit">تحقق ودخول</button>
+    </form>
+
+    <div style="display:flex;justify-content:space-between;margin-top:18px">
+        <form method="POST" action="{{ url_for('resend') }}">
+            <button class="btn ghost sm" type="submit">إعادة إرسال الرمز</button>
+        </form>
+        <a class="link" href="{{ url_for('login') }}" style="align-self:center">تغيير البريد</a>
+    </div>
+</div>
+{% endblock %}

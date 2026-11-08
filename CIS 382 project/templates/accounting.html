@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% block title %}المحاسبة{% endblock %}
+{% block head %}
+<style>
+    .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 28px; }
+    .card { background: var(--panel-2); border: 1px solid var(--line); border-radius: 14px; padding: 18px; }
+    .card small { color: var(--muted); font-size: 13px; }
+    .card .val { font-size: 24px; font-weight: 700; margin-top: 6px; direction: ltr; text-align: right; }
+    .income { color: var(--green); } .expense { color: var(--red); } .balance { color: var(--cyan); }
+    .add-row { display: grid; grid-template-columns: 1fr 2fr 1fr auto; gap: 10px; align-items: end; }
+    .add-row form { display: contents; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 12px 10px; text-align: right; font-size: 14px; border-bottom: 1px solid var(--line); }
+    th { color: var(--muted); font-weight: 500; font-size: 13px; }
+    td.amt { direction: ltr; text-align: right; font-weight: 600; }
+    .tag { padding: 3px 10px; border-radius: 20px; font-size: 12px; }
+    .tag.income { background: rgba(52,211,153,.12); }
+    .tag.expense { background: rgba(248,113,113,.12); }
+    .table-wrap { overflow-x: auto; }
+    @media (max-width: 700px) {
+        .cards { grid-template-columns: 1fr; }
+        .add-row { grid-template-columns: 1fr; }
+    }
+</style>
+{% endblock %}
+{% block body %}
+<div class="container">
+    <div class="icon">📊</div>
+    <h1>المحاسبة</h1>
+    <p class="subtitle">تتبّع الإيرادات والمصروفات بسهولة</p>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for cat, msg in messages %}<div class="flash {{ cat }}">{{ msg }}</div>{% endfor %}
+    {% endwith %}
+
+    <div class="cards">
+        <div class="card"><small>الإيرادات</small><div class="val income">{{ '%.2f'|format(income) }}</div></div>
+        <div class="card"><small>المصروفات</small><div class="val expense">{{ '%.2f'|format(expense) }}</div></div>
+        <div class="card"><small>الرصيد</small><div class="val balance">{{ '%.2f'|format(balance) }}</div></div>
+    </div>
+
+    <h2>إضافة عملية</h2>
+    <div class="add-row">
+        <form method="POST" action="{{ url_for('add_transaction') }}">
+            <div class="group">
+                <label>النوع</label>
+                <select name="type">
+                    <option value="income">إيراد</option>
+                    <option value="expense">مصروف</option>
+                </select>
+            </div>
+            <div class="group">
+                <label>الوصف</label>
+                <input type="text" name="title" placeholder="مثال: فاتورة كهرباء" required>
+            </div>
+            <div class="group">
+                <label>المبلغ</label>
+                <input type="number" name="amount" step="0.01" min="0.01" placeholder="0.00" required>
+            </div>
+            <button class="btn" type="submit">+ إضافة</button>
+        </form>
+    </div>
+
+    <div class="divider"></div>
+
+    <h2>العمليات</h2>
+    {% if rows %}
+    <div class="table-wrap">
+        <table>
+            <thead><tr><th>النوع</th><th>الوصف</th><th>المبلغ</th><th>التاريخ</th><th></th></tr></thead>
+            <tbody>
+            {% for r in rows %}
+                <tr>
+                    <td><span class="tag {{ r.type }}">{{ 'إيراد' if r.type == 'income' else 'مصروف' }}</span></td>
+                    <td>{{ r.title }}</td>
+                    <td class="amt {{ r.type }}">{{ '+' if r.type == 'income' else '-' }}{{ '%.2f'|format(r.amount) }}</td>
+                    <td style="color:var(--muted);direction:ltr;text-align:right">{{ r.created_at }}</td>
+                    <td>
+                        <form method="POST" action="{{ url_for('delete_transaction', tid=r.id) }}"
+                              onsubmit="return confirm('حذف هذه العملية؟')">
+                            <button class="btn danger sm" type="submit">حذف</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty">لا توجد عمليات بعد. أضف أول عملية 💼</div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}تسجيل الدخول{% endblock %}
+{% block body %}
+<div class="container narrow" style="margin-top:8vh">
+    <div class="icon">✉</div>
+    <h1>مرحباً بك</h1>
+    <p class="subtitle">أدخل بريدك الإلكتروني وسنرسل لك رمز تحقق</p>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for cat, msg in messages %}<div class="flash {{ cat }}">{{ msg }}</div>{% endfor %}
+    {% endwith %}
+
+    <form method="POST" action="{{ url_for('login') }}">
+        <div class="group">
+            <label for="email">البريد الإلكتروني</label>
+            <input type="email" id="email" name="email" placeholder="name@example.com"
+                   dir="ltr" required autofocus>
+        </div>
+        <button class="btn" type="submit">إرسال الرمز</button>
+    </form>
+</div>
+{% endblock %}
